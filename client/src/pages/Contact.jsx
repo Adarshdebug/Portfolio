@@ -2,15 +2,16 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import PageIntro from "../components/PageIntro.jsx";
 import SEO from "../components/SEO.jsx";
+import { fallbackContact } from "../lib/fallbackContent.js";
 import { request } from "../lib/api.js";
 
 export default function Contact() {
-  const [contact, setContact] = useState(null);
+  const [contact, setContact] = useState(fallbackContact);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
-    request("/contact").then(setContact).catch(() => null);
+    request("/contact").then(setContact).catch(() => setContact(fallbackContact));
   }, []);
 
   const submit = async (event) => {
@@ -20,8 +21,8 @@ export default function Contact() {
       await request("/contact/message", { method: "POST", body: JSON.stringify(form) });
       toast.success("Message sent");
       setForm({ name: "", email: "", message: "" });
-    } catch (error) {
-      toast.error(error.message);
+    } catch {
+      toast.error("Live form unavailable right now. Please use the email link.");
     } finally {
       setSending(false);
     }
@@ -31,12 +32,12 @@ export default function Contact() {
     <>
       <SEO title="Contact | Adarsh" description="Contact Adarsh for web, AI, and full-stack product work." />
       <section className="section">
-        <PageIntro eyebrow="Contact" title="Let’s build something focused." text="Send a note with the shape of the idea, the goal, and what success should feel like." />
+        <PageIntro eyebrow="Contact" title="Let's build something focused." text="Send a note with the shape of the idea, the goal, and what success should feel like." />
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="panel rounded-lg p-8">
             <h2 className="text-2xl font-bold">Contact details</h2>
             <div className="mt-6 grid gap-4 text-[#5d6675] dark:text-white/62">
-              <p>Email: {contact?.email || "admin@example.com"}</p>
+              <p>Email: {contact?.email || fallbackContact.email}</p>
               {contact?.location && <p>Location: {contact.location}</p>}
               <div className="flex flex-wrap gap-3 pt-2">
                 {["github", "linkedin", "twitter", "website"].map((key) =>

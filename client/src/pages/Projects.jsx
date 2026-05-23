@@ -3,6 +3,7 @@ import PageIntro from "../components/PageIntro.jsx";
 import ProjectCard from "../components/ProjectCard.jsx";
 import SEO from "../components/SEO.jsx";
 import Skeleton from "../components/Skeleton.jsx";
+import { fallbackProjects } from "../lib/fallbackContent.js";
 import { assetUrl, request } from "../lib/api.js";
 
 export default function Projects() {
@@ -14,6 +15,7 @@ export default function Projects() {
   useEffect(() => {
     request("/projects")
       .then(setProjects)
+      .catch(() => setProjects(fallbackProjects))
       .finally(() => setLoading(false));
   }, []);
 

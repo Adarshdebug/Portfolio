@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO.jsx";
+import { fallbackAbout } from "../lib/fallbackContent.js";
 import { assetUrl, request } from "../lib/api.js";
 
 const fallbackWords = ["Full-Stack Developer", "React Specialist", "Product Builder", "AI Explorer"];
@@ -9,10 +10,10 @@ const fallbackWords = ["Full-Stack Developer", "React Specialist", "Product Buil
 export default function Home() {
   const [about, setAbout] = useState(null);
   const [wordIndex, setWordIndex] = useState(0);
-  const words = about?.typingWords?.length ? about.typingWords : fallbackWords;
+  const words = about?.typingWords?.length ? about.typingWords : fallbackAbout.typingWords || fallbackWords;
 
   useEffect(() => {
-    request("/about").then(setAbout).catch(() => null);
+    request("/about").then(setAbout).catch(() => setAbout(fallbackAbout));
   }, []);
 
   useEffect(() => {
@@ -30,11 +31,11 @@ export default function Home() {
               Available for thoughtful builds
             </p>
             <h1 className="max-w-3xl text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
-              {about?.name || "Adarsh"}
+              {about?.name || fallbackAbout.name}
               <span className="mt-3 block text-[#2a6fdb] dark:text-[#8fd694]">{words[wordIndex]}</span>
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5d6675] dark:text-white/62">
-              {about?.intro || "I design and ship elegant, fast, human-friendly digital products."}
+              {about?.intro || fallbackAbout.intro}
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link to="/projects" className="button-primary">
@@ -52,8 +53,8 @@ export default function Home() {
             className="relative"
           >
             <img
-              src={assetUrl(about?.profileImage) || "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=80"}
-              alt={about?.name || "Profile portrait"}
+              src={assetUrl(about?.profileImage) || fallbackAbout.profileImage}
+              alt={about?.name || fallbackAbout.name}
               className="aspect-[4/5] w-full rounded-lg object-cover shadow-soft"
               loading="eager"
             />

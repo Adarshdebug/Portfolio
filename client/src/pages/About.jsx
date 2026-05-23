@@ -3,13 +3,14 @@ import { motion } from "framer-motion";
 import PageIntro from "../components/PageIntro.jsx";
 import SEO from "../components/SEO.jsx";
 import Skeleton from "../components/Skeleton.jsx";
+import { fallbackAbout } from "../lib/fallbackContent.js";
 import { request } from "../lib/api.js";
 
 export default function About() {
   const [about, setAbout] = useState(null);
 
   useEffect(() => {
-    request("/about").then(setAbout).catch(() => null);
+    request("/about").then(setAbout).catch(() => setAbout(fallbackAbout));
   }, []);
 
   return (

@@ -89,9 +89,7 @@ Open `http://localhost:5173`.
 
 The seed script uses these defaults unless changed in `server/.env`:
 
-```text
-Email: admin@example.com
-Password: admin12345
+
 ```
 
 Admin dashboard: `http://localhost:5173/admin/login`
